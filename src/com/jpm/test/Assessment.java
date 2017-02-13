@@ -20,16 +20,16 @@ import java.util.Locale;
  */
 public class Assessment {
 
-	static List<Comparable> instructionList = null;
-	static String entity;
-	static String BS;
-	static double agreedFx=0.0;
-	static String currency;
-	static long units;
-	static double unitPrice = 0.0;
-	static int count = 0;
-	static List<Entity> incomingList = new ArrayList<Entity>();
-	static List<Entity> outgoingList = new ArrayList<Entity>();
+	private static List<Comparable> instructionList = null;
+	private static String entity;
+	private static String BS;
+	private static double agreedFx=0.0;
+	private static String currency;
+	private static long units;
+	private static double unitPrice = 0.0;
+	private static int count = 0;
+	private static List<Entity> incomingList = new ArrayList<Entity>();
+	private static List<Entity> outgoingList = new ArrayList<Entity>();
 	
 	
 	/**
@@ -76,13 +76,11 @@ public class Assessment {
 				}
 				
 				//Set trade amount
-				double tradeAmount=0.0;
+				double tradeAmount = agreedFx*units*unitPrice;
 				if(BS.equals("B")){
-					tradeAmount = getTradeAmt(agreedFx, units, unitPrice);
 					totalOutAmount=totalOutAmount+tradeAmount;
 					outgoingList.add(new Entity((String)instructionList.get(0), tradeAmount));
 				}else if(BS.equals("S")){
-					tradeAmount = getTradeAmt(agreedFx, units, unitPrice);
 					totalInAmount=totalInAmount+tradeAmount;
 					incomingList.add(new Entity((String)instructionList.get(0), tradeAmount));
 				}
@@ -102,17 +100,17 @@ public class Assessment {
 			// Incoming List Sort
 			System.out.println("Incoming Sorted List");
 			System.out.println("Entity Name		Entity Amount");
-			incomingList.sort(Comparator.comparing(Entity::getAmount));
-			for(int i=incomingList.size()-1;i>=0;i--){
-				System.out.println(((Entity)incomingList.get(i)).getName()+"			"+((Entity)incomingList.get(i)).getAmount());
+			incomingList.sort(Comparator.comparing(Entity::getAmount).reversed());
+			for(Entity entity: incomingList){
+				System.out.println(entity);
 			}
 			
 			// Outgoing List Sort
 			System.out.println("Outgoing Sorted List");
 			System.out.println("Entity Name		Entity Amount");
-			outgoingList.sort(Comparator.comparing(Entity::getAmount));
-			for(int i=outgoingList.size()-1;i>=0;i--){
-				System.out.println(((Entity)outgoingList.get(i)).getName()+"			"+((Entity)outgoingList.get(i)).getAmount());
+			outgoingList.sort(Comparator.comparing(Entity::getAmount).reversed());
+			for(Entity entity: outgoingList){
+				System.out.println(entity);
 			}
 		}catch(NullPointerException e){
 			System.out.println("Null pointer exception at comparator.");
@@ -130,13 +128,6 @@ public class Assessment {
 			System.out.println("Exception occurred in getSetlDate.");
 		}
 		return null;
-	}
-	
-	public static double getTradeAmt(double agreedFx, long units, double unitPrice){
-		
-		double tradeAmt=0.0;
-		tradeAmt = agreedFx*units*unitPrice;
-		return tradeAmt;
 	}
 	
 	public static DayOfWeek dateUtility(String setlDate){

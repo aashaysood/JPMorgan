@@ -9,8 +9,8 @@ package com.jpm.test;
  */
 public class Entity {
 	
-	public String name;
-	public double amount;
+	private String name;
+	private double amount;
 	
 	public Entity(String name, double amount){
 		this.name=name;
@@ -33,6 +33,9 @@ public class Entity {
 		this.amount = amount;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return name+"			"+amount;
+	}
 	
 }
